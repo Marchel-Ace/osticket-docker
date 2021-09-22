@@ -129,22 +129,6 @@ if (!$linked) {
 } else {
   echo "Using linked MySQL container\n";
 }
-
-// Wait for database connection
-echo "Waiting for database TCP connection to become available...\n";
-$s = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-$t = 0;
-while (!@socket_connect($s,$vars['dbhost'],getenv("MYSQL_PORT")) && $t < CONNECTION_TIMEOUT_SEC) {
-  $t++;
-  if (($t % 15) == 0) {
-    echo "Waited for $t seconds...\n";
-  }
-  sleep(1);
-}
-if ($t >= CONNECTION_TIMEOUT_SEC) {
-  err("Timed out waiting for database TCP connection");
-}
-
 // Check database installation status
 $db_installed = false;
 echo "Connecting to database mysql://${vars['dbuser']}@${vars['dbhost']}/${vars['dbname']}\n";
